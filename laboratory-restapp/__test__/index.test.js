@@ -4,7 +4,7 @@ const request = require('supertest')
 const app = require('../app.js')
 
 describe("POST /users/register", ()=>{
-    test("OK, Registration is succefull", async ()=>{
+    test("OK, Registration is successfull", async ()=>{
         const res = await request(app)
                           .post('/users/register')
                           .send({

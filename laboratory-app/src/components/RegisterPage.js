@@ -11,6 +11,8 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 import { InvertColorsOutlined } from '@mui/icons-material';
 import { styled } from '@mui/styles';
+import axios from 'axios';
+import axiosInstance from './axiosConfig';
 
 const MyButton = styled(({ color, ...other }) => <Button {...other} />)({
     background: (props) =>
@@ -53,20 +55,18 @@ export default function RegisterPage(props) {
     
     try{
       if (isnameValid && isEmailValid && isPasswordValid){
-      const url='http://localhost:4000/users/register';
-      const res=await fetch(url,{method:"POST",headers:{
-        "content-type":"application/JSON"
-      },
-    body:JSON.stringify({fname,email,password,role})})
-    const data =await res.json();
-    if (data.error===true) {
+        // const token=localStorage.getItem('token');
+      const url='users/register';
+      const res=await axiosInstance.post(url,{fname,email,password,role})
+    // const data =await res.json();
+    if (res.data.error===true) {
       window.alert("Email already exists!");
     } else {
       window.alert("Registration Successfull");
       props.history.push('/userdetails')
     }
       }
-    // const datad=res.json();
+  
     }catch(err){
       console.log(err);
     }
@@ -146,7 +146,7 @@ export default function RegisterPage(props) {
             <Grid container spacing={2}>
               <Grid item xs={12} >
                 <TextField
-                title='fname'
+                  title="fname"
                   autoComplete="given-name"
                   data-testid="content-name"
                   name="fname"
@@ -164,7 +164,7 @@ export default function RegisterPage(props) {
               
               <Grid item xs={12}>
                 <TextField
-                title='email'
+                   title="email"
                   required
                   fullWidth
                   data-testid="content-email"
@@ -180,7 +180,7 @@ export default function RegisterPage(props) {
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                title='password'
+                  title="password"
                   required
                   fullWidth
                   name="password"
@@ -189,7 +189,7 @@ export default function RegisterPage(props) {
                   label="Password"
                   type="password"
                   id="password"
-                  onDropCapture={(e)=>setpassword(e.target.value)}
+                  onChange={(e)=>setpassword(e.target.value)}
                   autoComplete="new-password"
                 />
                 {!isPasswordValid ? <span style={{color:'red', fontSize:'11px',position:"relative",right:"30px"}}>{passwordError}</span> : null}
@@ -199,14 +199,14 @@ export default function RegisterPage(props) {
               <FormControl fullWidth>
               <InputLabel id="demo-simple-select-label">Role</InputLabel>
         <Select
-        title='role'
+        title="role"
           labelId="demo-simple-select-label"
           id="demo-simple-select"
           data-testid="content-role"
           value={role}
           label="role"
           name='role'
-          onClick={(e)=>setrole(e.target.value)}
+          onChange={(e)=>setrole(e.target.value)}
         >
           <MenuItem value='admin'>admin</MenuItem>
           <MenuItem value='user'>user</MenuItem>

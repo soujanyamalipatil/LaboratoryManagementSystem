@@ -4,7 +4,7 @@ import { FloatingLabel, Form } from 'react-bootstrap';
 function SearchBar({sampledetailsdata,setsampledetailsdata,copySampleDetails}) {
     
    const [search, setsearch] = useState();
-   const [data, setdata] = useState()
+  //  const [data, setdata] = useState()
     const handleSearch = (e) => {
         setsearch(e.target.value)
     }
@@ -22,8 +22,7 @@ function SearchBar({sampledetailsdata,setsampledetailsdata,copySampleDetails}) {
     }, [search])
   return (
     <div>
-        {/* <input onKeyDown={handleSearch} placeholder='Search Here' /> */}
-        {/* <button color='red'>search</button> */}
+        
         <div className='col-4'>
         <FloatingLabel controlId="floatingInputGrid" label="Search Here">
       <Form.Control type="text" placeholder="Seach Here" size='xxs' onKeyDown={handleSearch}/>

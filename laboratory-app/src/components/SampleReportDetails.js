@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { Button,Modal, Table } from 'react-bootstrap'
+import axiosInstance from './axiosConfig';
 import SearchBar from './SearchBar';
 
 function SampleReportDetails() {
-    // const [filtered, setfiltered] = useState([]);
+  
     const [sortToggle,setSortToggle]=useState(true)
     const [sampledetailsdata, setsampledetailsdata] = useState([]);
     const [copySampleDetails, setcopySampleDetails] = useState([]);
@@ -37,13 +38,12 @@ console.log(sampledetailsdata)
       
       const fetchSamples=async()=>{
         try{
-        const url='http://localhost:4000/samples/samples';
-        const resp=await fetch(url);
-        // console.log(resp.json());
-        const sampleData=await resp.json();
+        const url='samples/samples';
+        const resp=await axiosInstance.get(url);
+        const sampleData=await resp
         const datad=sampleData.data
-        setsampledetailsdata(datad);
-       setcopySampleDetails(datad);
+        setsampledetailsdata(datad.data);
+       setcopySampleDetails(datad.data);
         }catch(err){
           console.log(err)
         }
@@ -85,11 +85,11 @@ console.log(sampledetailsdata)
       <td>{data.pname}</td>
       <td>{data.email}</td>
       <td>{data.sampleId}</td>
-      <td>{data.haemotologyStatus==='view'?<button className="btn btn-primary" onClick={()=>{handleShow(data.haemotology)}}>viewdetails</button>:data.haemotologyStatus==='pending'?<button className="btn btn-info" >AddReport</button>:<button className="btn " disabled>NA</button>}</td>
-      <td>{data.thyroidStatus==='view'?<button className="btn btn-primary" onClick={()=>{handleShow(data.thyroid)}}>viewdetails</button>:data.thyroidStatus==='pending'?<button className="btn btn-info" >AddReport</button>:<button className="btn " disabled>NA</button>}</td>
-      <td>{data.glucometryStatus==='view'?<button className="btn btn-primary" onClick={()=>{handleShow(data.glocometry)}}>viewdetails</button>:data.glucometryStatus==='pending'?<button className="btn btn-info" >AddReport</button>:<button className="btn " disabled>NA</button>}</td>
+      <td>{data.haemotologyStatus==='view'?<button className="btn btn-primary" onClick={()=>{handleShow(data.haemotology)}}>viewDetails</button>:data.haemotologyStatus==='pending'?<Button className='btn btn-info'>AddReport</Button>:<button className="btn " disabled>NA</button>}</td>
+      <td>{data.thyroidStatus==='view'?<button className="btn btn-primary" onClick={()=>{handleShow(data.thyroid)}}>viewDetails</button>:data.thyroidStatus==='pending'?<Button className='btn btn-info' >AddReport</Button>:<button className="btn " disabled>NA</button>}</td>
+      <td>{data.glucometryStatus==='view'?<button className="btn btn-primary" onClick={()=>{handleShow(data.glucometry)}}>viewDetails</button>:data.glucometryStatus==='pending'?<Button className='btn btn-info' >AddReport</Button>:<button className="btn " disabled>NA</button>}</td>
     </tr>
-}):<tr><td>Loading</td></tr>}
+}):<tr><td>No records found</td></tr>}
     
   </tbody>
 </Table>

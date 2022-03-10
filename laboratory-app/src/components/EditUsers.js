@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { Fragment, useEffect, useState } from 'react';
-import { Modal, Button } from 'react-bootstrap';
+import { Modal, Button, Form } from 'react-bootstrap';
+import axiosInstance from './axiosConfig';
 
 function EditUsers(props) {
     const [show, setShow] = useState(false);
@@ -21,6 +22,7 @@ function EditUsers(props) {
 
     const handleClose = () => {
         setShow(false)
+        props.fetchSamples()
         props.setshowEditData(false)
     };
 
@@ -31,13 +33,15 @@ function EditUsers(props) {
     }
     const editProduct = async () => {
         console.log(user);
-        let url = 'http://localhost:4000/users/edit-users'
-        
+        const token=localStorage.getItem('token');
+        let url = 'users/edit-users'
+        // const headers={}
         try {
-                const response = await axios.put(url, user)
+                const response = await axiosInstance.put(url, user)
                 console.log(response.data);
                 if (response.data.error === false) {
                     handleClose()
+                    props.fetchSamples();
                     props.history.push('/userdetails')
                 } else {
                     alert(response.data.message)
@@ -80,12 +84,12 @@ function EditUsers(props) {
                                     onChange={handleChange}
                                     className="form-control" placeholder="Email Id" />
                             </div>
-                            <div className="col">
-                                <input type="text"
-                                    name="role"
-                                    value={user.role}
-                                    onChange={handleChange}
-                                    className="form-control" placeholder="role" />
+                
+                            <div className='col'>
+                            <select  name='role' style={{width:'220px',marginTop:'10px'}} value={user.role} onChange={handleChange}>
+                            <option >admin</option>
+                            <option >user</option>
+                          </select>
                             </div>
                         </div>
                     </div>
@@ -95,7 +99,7 @@ function EditUsers(props) {
                         Close
                     </Button>
                     <Button variant="primary" onClick={editProduct}>
-                        Edit
+                        Submit
                     </Button>
                 </Modal.Footer>
             </Modal>

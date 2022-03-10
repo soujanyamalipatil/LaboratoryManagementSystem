@@ -8,6 +8,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { styled } from '@mui/styles';
+import axiosInstance from './axiosConfig';
 // import axios from 'axios';
 
 
@@ -31,7 +32,7 @@ const MyButton = styled(({ color, ...other }) => <Button {...other} />)({
 
 const theme = createTheme();
 
-export default function AdminLogin({setadminLogin,error,seterror}) {
+export default function AdminLogin({setadminLogin,error,seterror},props) {
     
     const [email, setemail] = useState('');
     const [password, setpassword] = useState('');
@@ -42,31 +43,31 @@ export default function AdminLogin({setadminLogin,error,seterror}) {
     console.log(email)
     console.log(password)
     try{
-      // console.log(userCred)
+    
       console.log("login",email)
       console.log("login",password)
-    const url='http://localhost:4000/users/login';
+    const url='users/login';
     
-    const res=await fetch(url,{method:"POST",headers:{
-      "content-type":"application/JSON"
-    },
-  body:JSON.stringify({email,password})})
-  // console.log(res.json())
-  const datade=await res.json();
-  console.log(datade);
-  const data=await datade.data;
-  console.log(data.role);
-  if(datade.error===false){
-    if(datade.data.role==='admin'){
+    const res=await axiosInstance.post(url,{email,password});
+
+  console.log(res);
+ 
+  console.log(res.data.message,"-------------msg")
+  console.log(res.data.data.role);
+  if(res.data.error===false){
+    if(res.data.data.role==='admin'){
+      localStorage.setItem("token",res.data.data.token);
       localStorage.setItem("isAuth",true);
       setadminLogin(true);
+      seterror();
+      props.history.push('/home');
     }
   }else{
-    seterror(data.message);
+    seterror("user not registered");
   }
   
     }catch(err){
-      console.log(err)
+      seterror('Invalid email and password')
     }
   };
  
@@ -115,7 +116,7 @@ export default function AdminLogin({setadminLogin,error,seterror}) {
               onChange={(e)=>setpassword(e.target.value)}
               autoComplete="current-password"
             />
-            <Typography component="h6" variant='subtitle1'color="red">{error}</Typography>
+           {error&&<Typography component="h6" variant='subtitle1'color="red">{error}</Typography>}
             <MyButton
               type="submit"
               fullWidth

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Table } from 'react-bootstrap';
+import axiosInstance from './axiosConfig';
 import EditUsers from './EditUsers';
 
 function UserDetails() {
@@ -17,18 +18,19 @@ const handleShow=(data)=>{
     const fetchSamples=async()=>{
         
         try{
-        const url='http://localhost:4000/users/users';
-        const resp=await fetch(url);
-        const sampleData=await resp.json();
-        console.log(sampleData)
+        const url='users/users';
+        const resp=await axiosInstance.get(url);
+        const sampleData=await resp;
+        // console.log(sampleData)
         const datad=sampleData.data
-        setuserData(datad);
+        console.log(datad)
+        setuserData(datad.data);
         }catch(err){
           console.log(err)
         }
       }
   return (
-    <div>
+    <div style={{margin:'40px'}}>
         <h4>User Details</h4>
         {console.log(userData)}
         <Table  bordered  size="sm" >
@@ -38,6 +40,7 @@ const handleShow=(data)=>{
       <th>FullName</th>
       <th>Email</th>
       <th>Role</th>
+      <th>Edit</th>
     </tr>
   </thead>
   <tbody>
@@ -48,7 +51,7 @@ const handleShow=(data)=>{
       <td>{data.fname}</td>
       <td>{data.email}</td>
       <td>{data.role}</td>
-      <td><button className="btn btn-primary" title='editUserDetails' onClick={()=>{handleShow(data)}}>Edit</button></td>
+      <td><button className="btn btn-primary" data-testid="editUserBtn" onClick={()=>{handleShow(data)}}>Edit</button></td>
     </tr>
     
 }):<tr><td>Loading....</td></tr>}
@@ -56,7 +59,7 @@ const handleShow=(data)=>{
   </tbody>
 </Table>
 <EditUsers editableData={editableData} seteditableData={seteditableData}
-showEditData={showEditData} setshowEditData={setshowEditData}/>
+showEditData={showEditData} setshowEditData={setshowEditData} fetchSamples={fetchSamples}/>
     </div>
   )
 }

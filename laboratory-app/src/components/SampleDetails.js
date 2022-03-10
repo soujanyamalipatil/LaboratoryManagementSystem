@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { DataGrid, GridRowsProp, GridColDef } from '@mui/x-data-grid';
 import { Button } from '@mui/material';
-// let rowdata;
-// const rows: GridRowsProp= rowdata.length>0?rowdata.map((data)=>{
-//  return { id: data._id, col1: data.pname, col2: data.email,col3:data.sampleId,col4:data.haemotology,col5:data.thyroid,col6:data.glocometry }
-// }):'data'
 
 let displaybuttondata;
 const columns: GridColDef[] = [

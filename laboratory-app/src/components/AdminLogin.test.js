@@ -22,8 +22,8 @@ describe("input field test",()=>{
         let {getByTestId}=render (<AdminLogin />)
         // let input = queryByTitle("email")
         let contentInput = screen.getByTestId("content-email").querySelector('input');
-fireEvent.change(contentInput, {
-  target: { value: "new content" }
+        fireEvent.change(contentInput, {
+        target: { value: "new content" }
 });
 
         expect(contentInput).toBeTruthy()
@@ -46,8 +46,8 @@ fireEvent.change(contentInput, {
         let {getByTestId}=render (<AdminLogin />)
         // let input = queryByTitle("email")
         let contentInput = screen.getByTestId("content-password").querySelector('input');
-fireEvent.change(contentInput, {
-  target: { value: "new content" }
+        fireEvent.change(contentInput, {
+        target: { value: "new content" }
 });
 
         expect(contentInput).toBeTruthy()
